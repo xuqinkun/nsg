@@ -7,7 +7,7 @@
 
 #include <x86intrin.h>
 #include <iostream>
-#include <math>
+#include <math.h>
 namespace efanna2e{
   enum Metric{
     L2 = 0,
@@ -328,7 +328,7 @@ namespace efanna2e{
     class DistanceHPB : public Distance {
     public:
       float compare(const float* a, const float* b, unsigned size) const {
-        const float a_plus, b_plus, mul, dis;
+        float a_plus, b_plus, mul, dis;
         a_plus = sqrt(fast_multi_vec(a, a, size) + 1);
         b_plus = sqrt(fast_multi_vec(b, b, size) + 1);
         mul = fast_multi_vec(a, b, size) - a_plus * b_plus;
@@ -370,7 +370,6 @@ namespace efanna2e{
       }
       _mm256_storeu_ps(unpack, sum);
       result = unpack[0] + unpack[1] + unpack[2] + unpack[3] + unpack[4] + unpack[5] + unpack[6] + unpack[7];
-      x_plus = sqrt(result + 1);
 #endif
 
             return result;
