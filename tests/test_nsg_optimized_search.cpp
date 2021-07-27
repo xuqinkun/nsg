@@ -42,14 +42,15 @@ void save_result(const char* filename,
   out.close();
 }
 int main(int argc, char** argv) {
-  if (argc != 7) {
+  if (argc != 8) {
     std::cout << argv[0]
-              << " data_file query_file nsg_path search_L search_K result_path"
+              << " data_file query_file nsg_path search_L search_K result_path metric_type"
               << std::endl;
     exit(-1);
   }
   float* data_load = NULL;
   unsigned points_num, dim;
+  efanna2e::Metric metric_type;
   load_data(argv[1], data_load, points_num, dim);
   float* query_load = NULL;
   unsigned query_num, query_dim;
@@ -58,6 +59,17 @@ int main(int argc, char** argv) {
 
   unsigned L = (unsigned)atoi(argv[4]);
   unsigned K = (unsigned)atoi(argv[5]);
+  std::string metric(argv[7]);
+
+  if (!metric.compare("L2")) {
+    metric_type = efanna2e::L2;
+  } else if (!metric.compare("HPB")) {
+    metric_type = efanna2e::HPB;
+  } else {
+    std::cout << "Unknown metric type: " << argv[7]
+              << std::endl;
+    exit(-1);
+  }
 
   if (L < K) {
     std::cout << "search_L cannot be smaller than search_K!" << std::endl;
@@ -66,8 +78,9 @@ int main(int argc, char** argv) {
 
   // data_load = efanna2e::data_align(data_load, points_num, dim);//one must
   // align the data before build query_load = efanna2e::data_align(query_load,
-  // query_num, query_dim);
-  efanna2e::IndexNSG index(dim, points_num, efanna2e::FAST_L2, nullptr);
+  // query_num, query_dim);、
+  
+  efanna2e::IndexNSG index(dim, points_num, metric_type, nullptr);
   index.Load(argv[3]);
   index.OptimizeGraph(data_load);
 

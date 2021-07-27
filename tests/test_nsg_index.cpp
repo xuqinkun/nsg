@@ -27,23 +27,36 @@ void load_data(char* filename, float*& data, unsigned& num,
   in.close();
 }
 int main(int argc, char** argv) {
-  if (argc != 7) {
-    std::cout << argv[0] << " data_file nn_graph_path L R C save_graph_file"
+  if (argc != 8) {
+    std::cout << argv[0] << " data_file nn_graph_path L R C save_graph_file metric_type"
               << std::endl;
     exit(-1);
   }
   float* data_load = NULL;
   unsigned points_num, dim;
+  efanna2e::Metric metric_type;
   load_data(argv[1], data_load, points_num, dim);
 
   std::string nn_graph_path(argv[2]);
   unsigned L = (unsigned)atoi(argv[3]);
   unsigned R = (unsigned)atoi(argv[4]);
   unsigned C = (unsigned)atoi(argv[5]);
+  std::string metric(argv[6]);
+
+  if (!metric.compare("L2")) {
+    metric_type = efanna2e::L2;
+  } else if (!metric.compare("HPB")) {
+    metric_type = efanna2e::HPB;
+  } else {
+    std::cout << "Unknown metric type: " << argv[6]
+              << std::endl;
+    exit(-1);
+  }
+
 
   // data_load = efanna2e::data_align(data_load, points_num, dim);//one must
   // align the data before build
-  efanna2e::IndexNSG index(dim, points_num, efanna2e::L2, nullptr);
+  efanna2e::IndexNSG index(dim, points_num, metric_type, nullptr);
 
   auto s = std::chrono::high_resolution_clock::now();
   efanna2e::Parameters paras;
