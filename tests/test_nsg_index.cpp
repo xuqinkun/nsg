@@ -41,14 +41,14 @@ int main(int argc, char** argv) {
   unsigned L = (unsigned)atoi(argv[3]);
   unsigned R = (unsigned)atoi(argv[4]);
   unsigned C = (unsigned)atoi(argv[5]);
-  std::string metric(argv[6]);
+  std::string metric(argv[7]);
 
   if (!metric.compare("L2")) {
     metric_type = efanna2e::L2;
   } else if (!metric.compare("HPB")) {
     metric_type = efanna2e::HPB;
   } else {
-    std::cout << "Unknown metric type: " << argv[6]
+    std::cout << "Unknown metric type: " << argv[7]
               << std::endl;
     exit(-1);
   }
