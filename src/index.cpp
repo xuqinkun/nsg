@@ -10,6 +10,8 @@ Index::Index(const size_t dimension, const size_t n, Metric metric = L2)
     switch (metric) {
       case L2:distance_ = new DistanceL2();
         break;
+      case HPB:distance_ = new DistanceHPB();
+        break;
       default:distance_ = new DistanceL2();
         break;
     }
